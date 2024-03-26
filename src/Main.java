@@ -101,10 +101,10 @@ public class Main {
             Scanner scan = new Scanner(data);
             while(scan.hasNext()) {
                 String str = scan.nextLine();
-                String city = str.substring(0, str.indexOf(", "));
-                str = str.substring(str.indexOf(", ") + 1);
-                double temp = Double.parseDouble(str.substring(0, str.indexOf(", ")));
-                str = str.substring(str.indexOf(", ") + 1);
+                String city = str.substring(0, str.indexOf(","));
+                str = str.substring(str.indexOf(",") + 1);
+                double temp = Double.parseDouble(str.substring(0, str.indexOf(",")));
+                str = str.substring(str.indexOf(",") + 1);
                 double humidity = Double.parseDouble(str);
                 WeatherData found = new WeatherData(city, temp, humidity);
                 info.add(found);
@@ -124,17 +124,15 @@ public class Main {
      */
     public static void PrintWeatherData(ArrayList<WeatherData> weatherData)
     {
-       for(int i = 0; i<weatherData.size(); i++){
-           for(WeatherData info : weatherData){
-               System.out.println(info);
-           }
-           /*String city = weatherData.get(i).getCity();
-           double avgTemp = weatherData.get(i).getAverageTemp();
-           double avgHumidity = weatherData.get(i).getAverageHumidity();
-           System.out.println(city + ", " + avgTemp + ", " + avgHumidity);
-
-            */
+       for(WeatherData info : weatherData){
+           System.out.println(info);
        }
+       /*String city = weatherData.get(i).getCity();
+       double avgTemp = weatherData.get(i).getAverageTemp();
+       double avgHumidity = weatherData.get(i).getAverageHumidity();
+       System.out.println(city + ", " + avgTemp + ", " + avgHumidity);
+
+        */
     }
 
     /*
@@ -170,7 +168,7 @@ public class Main {
         else{
             PrintWriter printWriter = new PrintWriter(new FileOutputStream(path, shouldAppend));//(note to self) check this line
             for(WeatherData info : weatherData){
-                printWriter.write(info.toString());
+                printWriter.write(info.toString() + "\n");
             }
             printWriter.close();;
         }

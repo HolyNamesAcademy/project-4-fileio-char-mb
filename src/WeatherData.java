@@ -31,7 +31,7 @@ public class WeatherData implements Comparable<WeatherData> {
      */
     public String toString()
     {
-       return city + ", " + averageHumidity + ", " + averageHumidity + "\n";
+       return city + "," + averageTemp + "," + averageHumidity;
     }
 
     /*

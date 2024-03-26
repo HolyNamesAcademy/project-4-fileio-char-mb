@@ -1,3 +1,8 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,8 +16,7 @@ public class Main {
     'append' - writes weather data to a file -- appends data to the file if it exists
     'quit' - ends the program
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws FileNotFoundException {
         ArrayList<WeatherData> weatherData = null;
         while (true)
         {
@@ -88,10 +92,26 @@ public class Main {
     If the file does not exist, the function catches the exception, prints a message
     to the console, and return an empty (not null) array.
      */
-    public static ArrayList<WeatherData> ReadFile(String path)
+    // CHECK!!!
+    public static ArrayList<WeatherData> ReadFile(String path) throws FileNotFoundException
     {
-        // remove the line below and implement your function here
-        throw new UnsupportedOperationException();
+        ArrayList<WeatherData> info = new ArrayList<>();
+        File data = new File(path);
+        if(data.isFile()){
+            Scanner scan = new Scanner(data);
+            while(scan.hasNext()) {
+                String str = scan.nextLine();
+                String city = str.substring(0, str.indexOf(","));
+                str = str.substring(str.indexOf(",") + 1);
+                double temp = Double.parseDouble(str.substring(0, str.indexOf(",")));
+                str = str.substring(str.indexOf(",") + 1);
+                double humidity = Double.parseDouble(str);
+                WeatherData found = new WeatherData(city, temp, humidity);
+                info.add(found);
+            }
+            return info;
+        }
+        throw new FileNotFoundException();
     }
 
     /*
@@ -104,8 +124,15 @@ public class Main {
      */
     public static void PrintWeatherData(ArrayList<WeatherData> weatherData)
     {
-        // remove the line below and implement your function here
-        throw new UnsupportedOperationException();
+       for(WeatherData info : weatherData){
+           System.out.println(info);
+       }
+       /*String city = weatherData.get(i).getCity();
+       double avgTemp = weatherData.get(i).getAverageTemp();
+       double avgHumidity = weatherData.get(i).getAverageHumidity();
+       System.out.println(city + ", " + avgTemp + ", " + avgHumidity);
+
+        */
     }
 
     /*
@@ -113,8 +140,15 @@ public class Main {
      */
     public static void SortWeatherData(ArrayList<WeatherData> weatherData)
     {
-        // remove the line below and implement your function here
-        throw new UnsupportedOperationException();
+        for(int i = 1; i< weatherData.size(); i++){
+            WeatherData list = weatherData.get(i);
+            int j = i;
+            while(j>0 && weatherData.get(j-1).getAverageTemp()<list.getAverageTemp()){
+                weatherData.set(j, weatherData.get(j-1));
+                j--;
+            }
+            weatherData.set(j, list);
+        }
     }
 
     /*
@@ -125,9 +159,18 @@ public class Main {
     If the file cannot be created, the function catches the exception, prints a message
     to the console, and does not try to write to the file.
      */
-    public static void WriteFile(String path, boolean shouldAppend, ArrayList<WeatherData> weatherData)
+    public static void WriteFile(String path, boolean shouldAppend, ArrayList<WeatherData> weatherData) throws FileNotFoundException
     {
-        // remove the line below and implement your function here
-        throw new UnsupportedOperationException();
+        File data = new File(path);
+        if(!data.isFile()){
+            throw new FileNotFoundException("Does not exist.");
+        }
+        else{
+            PrintWriter printWriter = new PrintWriter(new FileOutputStream(path, shouldAppend));//(note to self) check this line
+            for(WeatherData info : weatherData){
+                printWriter.write(info.toString() + "\n");
+            }
+            printWriter.close();;
+        }
     }
 }
